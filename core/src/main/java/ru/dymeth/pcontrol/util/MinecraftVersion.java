@@ -25,10 +25,6 @@ public class MinecraftVersion {
             this.serverMinorVersion = this.parseVersionSection(sections[1], "minor");
             this.serverPatchVersion = sections.length == 2 ? 0 : this.parseVersionSection(sections[2], "patch");
 
-            if (this.serverMajorVersion != 1) {
-                throw new IllegalArgumentException("Unsupported major version: " + this.serverMajorVersion);
-            }
-
         } catch (Exception e) {
             throw new RuntimeException("Unsupported server version", e);
         }
@@ -43,7 +39,7 @@ public class MinecraftVersion {
     @Nullable
     private String getMinecraftVersionModern(@Nonnull Server server) {
         try {
-            // Paper 1.15+
+            // Paper 1.15+ (including the 26.x versioning scheme)
             Method method = server.getClass().getDeclaredMethod("getMinecraftVersion");
             return ((String) method.invoke(server));
         } catch (Throwable t) {

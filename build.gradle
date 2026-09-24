@@ -6,7 +6,7 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
 allprojects {
-    int javaVersion = 8
+    int javaVersion = 25
 
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
@@ -38,7 +38,11 @@ allprojects {
     }
 
     configurations {
-        implementation.extendsFrom shade
+        shade
+    }
+
+    plugins.withId('java') {
+        configurations.implementation.extendsFrom(configurations.shade)
     }
 }
 

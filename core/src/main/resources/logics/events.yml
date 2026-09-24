@@ -121,7 +121,7 @@ org/bukkit/event/entity/EntityChangeBlockEvent:
     non-falling-from: "#physicscontrol_wooden_doors"
   15:
     trigger: "IGNORED_STATE" # Boats destroys lilies
-    non-falling-by: "boat"
+    non-falling-by: "#boat"
   16:
     trigger: "SHEEPS_EATING_GRASS"
     non-falling-by: "sheep"

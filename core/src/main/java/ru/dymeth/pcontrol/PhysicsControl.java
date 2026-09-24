@@ -24,6 +24,7 @@ import ru.dymeth.pcontrol.listener.block.*;
 import ru.dymeth.pcontrol.listener.custom.BoneMealUsageListener;
 import ru.dymeth.pcontrol.listener.entity.EntityChangeBlockEventListener;
 import ru.dymeth.pcontrol.listener.entity.EntityInteractEventListener;
+import ru.dymeth.pcontrol.listener.entity.ModernPhysicsEventListener;
 import ru.dymeth.pcontrol.listener.entity.ProjectileHitEventListener;
 import ru.dymeth.pcontrol.listener.player.PlayerInteractEventListener;
 import ru.dymeth.pcontrol.listener.world.StructureGrowEventListener;
@@ -91,6 +92,7 @@ public final class PhysicsControl extends JavaPlugin implements Listener {
             () -> new EntityInteractEventListener(this.data, parser));
         this.reg("org.bukkit.event.entity.ProjectileHitEvent",
             () -> new ProjectileHitEventListener(this.data, parser));
+        this.reg(new ModernPhysicsEventListener(this.data));
         this.reg("org.bukkit.event.player.PlayerInteractEvent",
             () -> new PlayerInteractEventListener(this.data, parser));
         this.reg("org.bukkit.event.world.StructureGrowEvent",

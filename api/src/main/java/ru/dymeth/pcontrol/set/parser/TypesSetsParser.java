@@ -74,8 +74,18 @@ public class TypesSetsParser {
                     String elementOrTagName = args[args.length - 1];
 
                     if (!elementOrTagName.startsWith("#")) {
-                        set.add(elementOrTagName.toUpperCase());
-                        continue;
+                        try {
+                            set.add(elementOrTagName.toUpperCase());
+                            continue;
+                        } catch (IllegalArgumentException enumError) {
+                            // Minecraft 26.x split some former enum values (for example EntityType.BOAT)
+                            // into multiple registry entries. Keep old PhysicsControl configs working by
+                            // falling back to a vanilla tag with the same name when it exists.
+                            if (this.tryAddBukkitTag(set, tagRegistryName, typeClass, elementOrTagName)) {
+                                continue;
+                            }
+                            throw enumError;
+                        }
                     }
 
                     elementOrTagName = elementOrTagName.substring("#".length()).toLowerCase();
@@ -89,31 +99,43 @@ public class TypesSetsParser {
                     }
 
                     // bukkit tags
-
-                    if (!this.bukkitTagsSupported) {
-                        throw new IllegalArgumentException("Tags in unsupported on current server version");
-                    }
-
-                    if (!Keyed.class.isAssignableFrom(typeClass)) {
-                        throw new IllegalArgumentException("Class isn't supported vanilla tags: " + typeClass.getName());
-                    }
-
-                    //noinspection unchecked
-                    Class<? extends Keyed> keyedClass = (Class<? extends Keyed>) typeClass;
-                    Tag<? extends Keyed> tag = Bukkit.getTag(tagRegistryName, NamespacedKey.minecraft(elementOrTagName.toLowerCase()), keyedClass);
-                    if (tag == null) {
+                    if (!this.tryAddBukkitTag(set, tagRegistryName, typeClass, elementOrTagName)) {
                         throw new IllegalArgumentException("Bukkit tag not found: " + elementOrTagName);
                     }
-
-                    //noinspection unchecked
-                    set.addPrimitive(tag.getValues().stream()
-                        .map(keyed -> (E) keyed)
-                        .collect(Collectors.toList()));
                 } catch (Throwable t) {
                     throw new RuntimeException("Unable to parse element \"" + elementRaw + "\"", t);
                 }
             }
         };
+    }
+
+
+    private <E extends Enum<E>, T extends CustomEnumSet<E, ?>> boolean tryAddBukkitTag(
+        @Nonnull T set,
+        @Nonnull String tagRegistryName,
+        @Nonnull Class<E> typeClass,
+        @Nonnull String tagName
+    ) {
+        if (!this.bukkitTagsSupported || !Keyed.class.isAssignableFrom(typeClass)) {
+            return false;
+        }
+
+        //noinspection unchecked
+        Class<? extends Keyed> keyedClass = (Class<? extends Keyed>) typeClass;
+        Tag<? extends Keyed> tag = Bukkit.getTag(
+            tagRegistryName,
+            NamespacedKey.minecraft(tagName.toLowerCase()),
+            keyedClass
+        );
+        if (tag == null) {
+            return false;
+        }
+
+        //noinspection unchecked
+        set.addPrimitive(tag.getValues().stream()
+            .map(keyed -> (E) keyed)
+            .collect(Collectors.toList()));
+        return true;
     }
 
     @SuppressWarnings("RedundantIfStatement")

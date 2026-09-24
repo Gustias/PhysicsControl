@@ -77,3 +77,10 @@ GLOW_BERRIES_GROWING: Glow berries vines growing
 DEBUG_MESSAGES: Debug messages
 ALLOW_UNRECOGNIZED_ACTIONS: Allow unrecognized actions
 IGNORED_STATE: Technical trigger
+MOB_AGE_LOCK_TOGGLING: Golden Dandelion age-lock toggling
+SPEAR_LUNGING: Spear lunging
+SULFUR_CUBE_SWALLOWING: Sulfur Cube item swallowing
+SULFUR_CUBE_IGNITION: Sulfur Cube ignition
+SULFUR_CUBE_EXPLOSIONS: Sulfur Cube explosions
+SULFUR_CUBE_TNT_SWALLOWING: Sulfur Cube TNT swallowing
+SULFUR_CUBE_EXPLOSION_BLOCK_DAMAGE: Sulfur Cube explosion block damage

@@ -119,10 +119,9 @@ public final class PControlDataBukkit implements PControlData {
 
     private void validateServerVersions() {
         try {
-            if (!this.serverVersion.hasVersion(1, 0, 0)
-                || this.serverVersion.hasVersion(2, 0, 0)
-            ) {
-                throw new IllegalArgumentException("Wrong major version");
+            // Legacy versions use 1.x; modern releases use calendar-style versions such as 26.2.
+            if (this.serverVersion.hasVersion(2, 0, 0) && !this.serverVersion.hasVersion(26, 0, 0)) {
+                throw new IllegalArgumentException("Unsupported version gap");
             }
             if (!this.serverVersion.hasVersion(1, 8, 0)) {
                 throw new IllegalArgumentException("Too old version. Minimal is 1.8");
@@ -136,7 +135,7 @@ public final class PControlDataBukkit implements PControlData {
             }
         } catch (Exception e) {
             throw new RuntimeException("Unsupported server version (" + this.serverVersion + "). "
-                + "It must be 1.8-1.12.2 or 1.13.2 and newer", e);
+                + "It must be 1.8-1.12.2, 1.13.2+, or 26.x+", e);
         }
     }
 

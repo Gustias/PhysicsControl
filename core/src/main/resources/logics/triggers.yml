@@ -92,6 +92,11 @@ PLAYERS_INTERACTIONS:
     defaults: true
     icon:
       - '1.17+ GLOW_BERRIES'
+  MOB_AGE_LOCK_TOGGLING:
+    realtime: false
+    defaults: true
+    icon:
+      - '26.1+ GOLDEN_DANDELION'
 ENTITIES_INTERACTIONS:
   BURNING_ARROWS_ACTIVATE_TNT:
     realtime: false
@@ -134,6 +139,36 @@ ENTITIES_INTERACTIONS:
     defaults: true
     icon:
       - '1.17+ POWDER_SNOW_BUCKET'
+  SPEAR_LUNGING:
+    realtime: false
+    defaults: true
+    icon:
+      - '26.1+ GOLDEN_SPEAR'
+  SULFUR_CUBE_SWALLOWING:
+    realtime: false
+    defaults: true
+    icon:
+      - '26.2+ SULFUR_CUBE_SPAWN_EGG'
+  SULFUR_CUBE_TNT_SWALLOWING:
+    realtime: false
+    defaults: true
+    icon:
+      - '26.2+ TNT'
+  SULFUR_CUBE_IGNITION:
+    realtime: false
+    defaults: true
+    icon:
+      - '26.2+ FLINT_AND_STEEL'
+  SULFUR_CUBE_EXPLOSIONS:
+    realtime: false
+    defaults: true
+    icon:
+      - '26.2+ TNT'
+  SULFUR_CUBE_EXPLOSION_BLOCK_DAMAGE:
+    realtime: false
+    defaults: true
+    icon:
+      - '26.2+ SULFUR'
 BUILDING:
   LADDERS_DESTROYING:
     realtime: false

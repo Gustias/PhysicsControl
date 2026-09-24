@@ -12,6 +12,5 @@ repositories {
 dependencies {
     implementation project(':api')
 
-    // compileOnly 'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT' // Min
-    compileOnly 'org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT' // Max: hub.spigotmc.org/nexus/#browse/browse:snapshots:org%2Fspigotmc%2Fspigot-api
+    compileOnly 'io.papermc.paper:paper-api:26.2.build.87-stable'
 }

@@ -77,3 +77,10 @@ GLOW_BERRIES_GROWING: Рост лоз светящихся ягод
 DEBUG_MESSAGES: Отладочные сообщения
 ALLOW_UNRECOGNIZED_ACTIONS: Разрешить неизвестные действия
 IGNORED_STATE: Технический триггер
+MOB_AGE_LOCK_TOGGLING: Переключение блокировки возраста Золотым одуванчиком
+SPEAR_LUNGING: Рывок копьём
+SULFUR_CUBE_SWALLOWING: Поглощение предметов серным кубом
+SULFUR_CUBE_IGNITION: Поджигание серного куба
+SULFUR_CUBE_EXPLOSIONS: Взрывы серного куба
+SULFUR_CUBE_TNT_SWALLOWING: Поглощение TNT серным кубом
+SULFUR_CUBE_EXPLOSION_BLOCK_DAMAGE: Разрушение блоков взрывом серного куба

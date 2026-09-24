@@ -10,10 +10,12 @@ import ru.dymeth.pcontrol.util.FileUtils;
 
 import javax.annotation.Nonnull;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 
 public class TriggersRegistry {
@@ -50,6 +52,7 @@ public class TriggersRegistry {
         File configFile = FileUtils.createConfigFileIfNotExist(this.data.getPlugin(),
             "logics/triggers.yml", "logics/triggers.yml");
         YamlConfiguration rootSection = YamlConfiguration.loadConfiguration(configFile);
+        this.mergeMissingDefaultTriggers(rootSection, configFile);
 
         for (String categoryName : rootSection.getKeys(false)) {
             ConfigurationSection categorySection = rootSection.getConfigurationSection(categoryName);
@@ -89,6 +92,56 @@ public class TriggersRegistry {
                 }
             }
         }
+    }
+
+    /**
+     * Adds trigger definitions introduced by newer PhysicsControl builds without
+     * overwriting any user-customized trigger metadata already present on disk.
+     *
+     * Older releases copied logics/triggers.yml only once, which meant newly
+     * added triggers never appeared for existing installations.
+     */
+    private void mergeMissingDefaultTriggers(@Nonnull YamlConfiguration actualConfig, @Nonnull File actualFile) {
+        YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(
+            new InputStreamReader(Objects.requireNonNull(
+                this.data.getPlugin().getResource("logics/triggers.yml"),
+                "Bundled logics/triggers.yml is missing"
+            ))
+        );
+
+        boolean changed = this.copyMissingValues(defaultConfig, actualConfig);
+        if (!changed) return;
+
+        try {
+            actualConfig.save(actualFile);
+            this.data.log().info("Added new PhysicsControl trigger definitions to logics/triggers.yml");
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to update " + actualFile.getAbsolutePath(), e);
+        }
+    }
+
+    private boolean copyMissingValues(@Nonnull ConfigurationSection source, @Nonnull ConfigurationSection target) {
+        boolean changed = false;
+
+        for (String key : source.getKeys(false)) {
+            ConfigurationSection sourceSection = source.getConfigurationSection(key);
+            if (sourceSection != null) {
+                ConfigurationSection targetSection = target.getConfigurationSection(key);
+                if (targetSection == null) {
+                    targetSection = target.createSection(key);
+                    changed = true;
+                }
+                changed = this.copyMissingValues(sourceSection, targetSection) || changed;
+                continue;
+            }
+
+            if (!target.contains(key)) {
+                target.set(key, source.get(key));
+                changed = true;
+            }
+        }
+
+        return changed;
     }
 
     @Nonnull
