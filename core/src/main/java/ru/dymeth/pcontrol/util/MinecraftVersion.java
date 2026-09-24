@@ -24,11 +24,6 @@ public class MinecraftVersion {
             this.serverMajorVersion = this.parseVersionSection(sections[0], "major");
             this.serverMinorVersion = this.parseVersionSection(sections[1], "minor");
             this.serverPatchVersion = sections.length == 2 ? 0 : this.parseVersionSection(sections[2], "patch");
-
-            if (this.serverMajorVersion != 1) {
-                throw new IllegalArgumentException("Unsupported major version: " + this.serverMajorVersion);
-            }
-
         } catch (Exception e) {
             throw new RuntimeException("Unsupported server version", e);
         }
@@ -43,7 +38,7 @@ public class MinecraftVersion {
     @Nullable
     private String getMinecraftVersionModern(@Nonnull Server server) {
         try {
-            // Paper 1.15+
+            // Paper 1.15+ (including the 26.x versioning scheme)
             Method method = server.getClass().getDeclaredMethod("getMinecraftVersion");
             return ((String) method.invoke(server));
         } catch (Throwable t) {
@@ -53,15 +48,6 @@ public class MinecraftVersion {
 
     @Nonnull
     private String getMinecraftVersionLegacy(@Nonnull Server server) {
-        // Format:
-        // %software%-%build% (MC: %major%.%minor%.%patch%)
-
-        // Examples:
-        // git-Spigot-21fe707-741a1bd (MC: 1.8.8)
-        // 3917-Spigot-dba3cdc-b590041 (MC: 1.20.2)
-        // git-Paper-1620 (MC: 1.12.2)
-        // git-Paper-241 (MC: 1.20.2)
-
         String result = server.getVersion();
         result = result.substring(
             result.lastIndexOf("(MC: ") + "(MC: ".length(),
@@ -92,7 +78,6 @@ public class MinecraftVersion {
 
     @SuppressWarnings("RedundantIfStatement")
     public boolean hasVersion(int majorVersion, int minorVersion, int patchVersion) {
-
         if (this.serverMajorVersion > majorVersion) return true;
         if (this.serverMajorVersion < majorVersion) return false;
 
@@ -107,7 +92,6 @@ public class MinecraftVersion {
 
     @SuppressWarnings("RedundantIfStatement")
     public boolean isVersion(int majorVersion, int minorVersion, int patchVersion) {
-
         if (this.serverMajorVersion != majorVersion) return false;
         if (this.serverMinorVersion != minorVersion) return false;
         if (this.serverPatchVersion != patchVersion) return false;
