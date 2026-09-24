@@ -38,7 +38,11 @@ allprojects {
     }
 
     configurations {
-        implementation.extendsFrom shade
+        shade
+    }
+
+    plugins.withId('java') {
+        configurations.implementation.extendsFrom(configurations.shade)
     }
 }
 
