@@ -31,3 +31,5 @@ jobs:
           name: PhysicsControl-26.2
           path: build/PhysicsControl-26.2.jar
           if-no-files-found: error
+
+# CI trigger
